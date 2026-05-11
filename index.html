@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Key System</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: radial-gradient(circle, #001, #000);
+  color: #00eaff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.box {
+  width: 320px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.8);
+  box-shadow: 0 0 30px #00eaff;
+}
+
+h2 {
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: none;
+  background: #001;
+  color: #00eaff;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #00eaff, #0077ff);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.status {
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>🔑 Key System</h2>
+
+  <input type="text" id="keyInput" placeholder="Nhập key...">
+
+  <button onclick="checkKey()">Check Key</button>
+  <button onclick="generateKey()">Tạo Key</button>
+
+  <div class="status" id="status">Đang chờ...</div>
+</div>
+
+<script>
+let keys = [];
+
+// tạo key
+function generateKey() {
+  let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+  function rand(len) {
+    let r = "";
+    for (let i = 0; i < len; i++) {
+      r += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return r;
+  }
+
+  let key = "VIP-" + rand(3) + "-" + rand(3);
+
+  let expire = Date.now() + 60000; // 1 phút (test)
+
+  keys.push({ key, expire });
+
+  alert("Key mới: " + key);
+}
+
+// check key
+function checkKey() {
+  let input = document.getElementById("keyInput").value;
+
+  let found = keys.find(k => k.key === input);
+
+  if (!found) {
+    document.getElementById("status").innerText = "❌ Sai key";
+    return;
+  }
+
+  if (Date.now() > found.expire) {
+    document.getElementById("status").innerText = "⏳ Key hết hạn";
+    return;
+  }
+
+  document.getElementById("status").innerText = "✅ Key hợp lệ!";
+}
+</script>
+
+</body>
+</html>
